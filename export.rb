@@ -1,23 +1,22 @@
-require 'bundler/inline'
+require 'bundler/setup'
 
-gemfile do
-  source 'https://rubygems.org'
+require 'tumblr_client'
+require 'httparty'
+require 'byebug'
+require 'parallel'
+require 'date'
+require 'ruby-progressbar'
+require 'nokogiri'
+require 'dotenv/load'
 
-  gem 'tumblr_client'
-  gem 'httparty'
-  gem 'byebug'
-  gem 'parallel'
-  gem 'date'
-  gem 'ruby-progressbar'
-  gem 'nokogiri'
-end
+puts "Starting at #{Time.now}"
 
 # Authenticate via OAuth
 client = Tumblr::Client.new(
-  consumer_key: '...',
-  consumer_secret: '...',
-  oauth_token: '...',
-  oauth_token_secret: '...'
+  consumer_key: ENV['TUMBLR_CONSUMER_KEY'],
+  consumer_secret: ENV['TUMBLR_CONSUMER_SECRET'],
+  oauth_token: ENV['TUMBLR_OAUTH_TOKEN'],
+  oauth_token_secret: ENV['TUMBLR_OAUTH_TOKEN_SECRET']
 )
 
 def download_photo(uri, like_timestamp, image_dir)
@@ -37,7 +36,7 @@ def get_html_src(html)
   doc.css('img').map { |i| i['src'] }
 end
 
-image_dir = '/mnt/Tumblr/images'
+image_dir = '\\\\nasrob\Privé\Tumblr\images'
 offset = 0
 
 loop do
